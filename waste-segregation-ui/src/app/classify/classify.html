@@ -1,0 +1,68 @@
+<div class="glass-container">
+  <div class="header">
+    <div class="icon-container">🌱</div>
+    <h2>Smart Sort</h2>
+    <p class="subtitle">Enter a waste item to discover how to properly dispose of it.</p>
+  </div>
+
+  <div class="image-preview" *ngIf="imageBase64">
+    <img [src]="imageBase64" alt="Uploaded Image Preview" />
+    <button type="button" class="remove-btn" (click)="imageBase64 = null">✕</button>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" class="search-form">
+    <div class="input-wrapper">
+      <input type="text" [(ngModel)]="item" name="item" placeholder="e.g. broken charger cable, banana peel..."
+        autocomplete="off" maxlength="100" />
+      <label class="file-upload-btn">
+        📷
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+      </label>
+      <button type="submit" [disabled]="loading || (!item.trim() && !imageBase64)" [class.loading]="loading">
+        <span *ngIf="!loading">Classify</span>
+        <span *ngIf="loading" class="spinner"></span>
+      </button>
+    </div>
+  </form>
+
+  <div class="example-chips" *ngIf="!result && !loading">
+    <span class="chip-label">Try:</span>
+    <button type="button" class="chip" *ngFor="let chip of exampleChips" (click)="selectChip(chip)">
+      {{ chip }}
+    </button>
+  </div>
+
+  <div class="result-card error-card fade-in" *ngIf="error">
+    <div class="icon-container error-icon">⚠️</div>
+    <div class="error-content">
+      <h3>Oops!</h3>
+      <p>{{ error }}</p>
+    </div>
+  </div>
+
+  <div class="result-card fade-in" *ngIf="result">
+    <div class="result-header">
+      <span class="badge" [ngClass]="result.category.toLowerCase()">
+        {{ getCategoryIcon(result.category) }} {{ result.category }}
+      </span>
+    </div>
+
+    <div class="result-body">
+      <div class="info-group">
+        <div class="info-label">♻️ How to dispose</div>
+        <p>{{ result.disposalInstructions }}</p>
+      </div>
+
+      <div class="info-group">
+        <div class="info-label">🧠 Why</div>
+        <p>{{ result.reasoning }}</p>
+      </div>
+
+      <div class="info-group tip-group">
+        <div class="info-label">💡 Pro Tip</div>
+        <p>{{ result.sustainabilityTip }}</p>
+      </div>
+    </div>
+  </div>
+
+</div>
