@@ -1,4 +1,5 @@
 ## ⚙️ Setup Instructions
+Aman Kumar
 
 ### Prerequisites
 - Node.js & npm (for Angular)
